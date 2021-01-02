@@ -1,5 +1,10 @@
  export default function render(vNode) {
-   // create actual element
+  // if the node type is string, call create text node
+  if (typeof vNode === 'string') {
+    return document.createTextNode(vNode);
+  }
+
+  // create actual element
   const $el = document.createElement(vNode.tagName);
 
   // append attributes

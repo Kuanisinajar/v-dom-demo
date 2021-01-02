@@ -7,6 +7,7 @@ const app = createElement('div', {
     id: 'app'
   },
   children: [
+    'cool',
     createElement('img', {
       attrs: {
         src: 'https://media.giphy.com/media/tkApIfibjeWt1ufWwj/giphy.gif',
