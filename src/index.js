@@ -1,5 +1,6 @@
 import createElement from './core/createElement';
 import render from './core/render';
+import mount from './core/mount';
 
 const app = createElement('div', {
   attrs: {
@@ -15,5 +16,7 @@ const app = createElement('div', {
 })
 
 const $app = render(app)
+
+mount($app, document.getElementById('root'))
 
 console.log($app, app, 'app')
