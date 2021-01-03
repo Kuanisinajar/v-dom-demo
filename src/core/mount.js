@@ -1,3 +1,5 @@
 export default function mount($node, $target) {
-  $target.appendChild($node);
+  $target.replaceWith($node);
+
+  return $node
 }
