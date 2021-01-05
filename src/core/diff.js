@@ -1,3 +1,4 @@
+import zip from 'lodash/zip';
 import render from './render';
 
 function diffAttr(vOldAttrs, vNewAttrs) {
@@ -32,6 +33,44 @@ function diffAttr(vOldAttrs, vNewAttrs) {
     patches.forEach((patch) => {
       patch($node)
     })
+  }
+}
+
+function diffChildren(vOldChildren, vNewChildren) {
+  const patches = [];
+  const newNodePatches = [];
+  const zippedChildren = zip(vOldChildren, vNewChildren);
+
+  zippedChildren.forEach(([vOldChild, vNewChild]) => {
+    if (!vOldChild) {
+      const vNewChildNode = render(vNewChild);
+
+      const patch = ($node) => {
+        $node.appendChild(vNewChildNode)
+
+        return $node
+      }
+
+      newNodePatches.push(patch);
+    }
+
+    const childrenPatch = diff(vOldChild, vNewChild);
+
+    patches.push(childrenPatch)
+  })
+
+  return ($parentNode) => {
+    const zippedPairs = zip(patches, $parentNode.childNodes);
+
+    zippedPairs.forEach(([patch, childNode]) => {
+      patch(childNode)
+    })
+
+    newNodePatches.forEach((patch) => {
+      patch($parentNode)
+    })
+
+    return $parentNode
   }
 }
 
@@ -72,10 +111,10 @@ export default function diff(vOldNode, vNewNode) {
   }
 
   const patchAttrs = diffAttr(vOldNode.attrs, vNewNode.attrs);
+  const patchChildren = diffChildren(vOldNode.children, vNewNode.children);
 
   return ($node) => {
-    const $newNode = patchAttrs($node);
-
-    return $newNode
+    patchAttrs($node);
+    patchChildren($node);
   }
 }

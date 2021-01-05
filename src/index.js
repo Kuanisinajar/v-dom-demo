@@ -13,6 +13,9 @@ function createVApp(count) {
     },
     children: [
       String(count),
+      createElement('input', {
+        attrs: {}
+      }),
       createElement('img', {
         attrs: {
           src: 'https://media.giphy.com/media/tkApIfibjeWt1ufWwj/giphy.gif',
@@ -28,7 +31,6 @@ const $app = render(app)
 const $root = mount($app, document.getElementById('root'))
 
 setInterval(() => {
-  console.log('fired')
   count++;
   const newApp = createVApp(count);
   const patch = diff(app, newApp);
